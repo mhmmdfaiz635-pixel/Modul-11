@@ -1,0 +1,149 @@
+LAPORAN LATIHAN MANDIRI
+Modul 9 - Array Dua Dimensi dan Pengolahan Data Berbentuk Tabel
+
+===============================================================
+1. LEVEL 1 - TOTAL SETIAP BARIS
+===============================================================
+
+Berkas: latihan_mandiri_01.c
+
+Data uji:
+1 2 3
+4 5 6
+7 8 9
+
+Hasil:
+Total baris 1: 6
+Total baris 2: 15
+Total baris 3: 24
+
+Hasil sesuai dengan contoh pada modul.
+
+Uji tambahan 1 x 1 dengan nilai 5:
+Total baris 1: 5
+
+===============================================================
+2. LEVEL 2 - TOTAL SETIAP KOLOM
+===============================================================
+
+Berkas: latihan_mandiri_02.c
+
+Data uji:
+1 2 3
+4 5 6
+7 8 9
+
+Hasil:
+Total kolom 1: 12
+Total kolom 2: 15
+Total kolom 3: 18
+
+Hasil sesuai dengan contoh pada modul.
+
+Uji tambahan 2 x 1 dengan nilai 2 dan 4:
+Total kolom 1: 6
+
+===============================================================
+3. LEVEL 3 - PENJUMLAHAN DUA MATRIKS
+===============================================================
+
+Berkas: latihan_mandiri_03.c
+
+Matriks A:
+1 2
+3 4
+
+Matriks B:
+5 6
+7 8
+
+Hasil penjumlahan:
+ 6  8
+10 12
+
+Hasil sesuai dengan contoh pada modul.
+
+===============================================================
+4. CHALLENGE - BINGKAI DAN DIAGONAL
+===============================================================
+
+Berkas: latihan_mandiri_04.c
+
+Hasil ukuran 5:
+# # # # #
+# X . . #
+# . X . #
+# . . X #
+# # # # #
+
+Hasil ukuran 3:
+# # #
+# X #
+# # #
+
+Aturan prioritas sudah diterapkan:
+1. Posisi bingkai selalu menghasilkan '#'.
+2. Posisi diagonal utama menghasilkan 'X' jika bukan bingkai.
+3. Posisi lainnya menghasilkan '.'.
+
+===============================================================
+5. DIAGONAL UTAMA VS SEKUNDER
+===============================================================
+
+Berkas: latihan_bonus_09.c
+
+Contoh 1
+Input:
+3
+2 4 6
+1 3 5
+9 8 7
+
+Output:
+========================================
+       DIAGONAL UTAMA VS SEKUNDER
+========================================
+Diagonal utama    : 12
+Diagonal sekunder : 18
+----------------------------------------
+Selisih           : -6
+========================================
+
+Contoh 2
+Input:
+2
+10 0
+0 10
+
+Output:
+========================================
+       DIAGONAL UTAMA VS SEKUNDER
+========================================
+Diagonal utama    : 20
+Diagonal sekunder : 0
+----------------------------------------
+Selisih           : 20
+========================================
+
+Contoh 3
+Input:
+1
+5
+
+Output:
+========================================
+       DIAGONAL UTAMA VS SEKUNDER
+========================================
+Diagonal utama    : 5
+Diagonal sekunder : 5
+----------------------------------------
+Selisih           : 0
+========================================
+
+Catatan:
+- Program bonus tidak menampilkan prompt input agar output tetap sesuai
+  format yang diminta.
+- Garis pembatas menggunakan 40 karakter '=' dan 40 karakter '-'.
+- Semua program dikompilasi dengan:
+  gcc -std=c17 -Wall -Wextra
+- Tidak ada error atau warning.

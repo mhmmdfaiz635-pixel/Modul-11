@@ -1,0 +1,94 @@
+LAPORAN DEBUGGING CHALLENGE
+Modul 9 - Array Dua Dimensi dan Pengolahan Data Berbentuk Tabel
+
+===============================================================
+1. DEBUGGING CHALLENGE 1 - INPUT DAN OUTPUT TABEL YANG SALAH
+===============================================================
+
+Program yang diperbaiki: debugging_01.c
+
+A. Indeks tidak valid pada program awal
+
+Input:
+    for (baris = 1; baris <= BARIS; baris++)
+    for (kolom = 1; kolom <= KOLOM; kolom++)
+    scanf("%d", &data[kolom][baris]);
+
+Masalah:
+- Indeks dimulai dari 1, sehingga baris 0 dan kolom 0 tidak pernah diisi.
+- Loop berjalan sampai baris = 3 dan kolom = 4, padahal indeks valid
+  baris adalah 0..2 dan kolom adalah 0..3.
+- Akses data[kolom][baris] menukar indeks baris dan kolom. Karena kolom
+  mencapai 4, muncul akses data[3][...] dan data[4][...] yang berada di
+  luar batas array.
+- Akses tidak valid pada input: data[3][1], data[3][2], data[3][3],
+  data[4][1], data[4][2], dan data[4][3].
+
+Output:
+    for (baris = 0; baris <= BARIS; baris++)
+    for (kolom = 0; kolom <= KOLOM; kolom++)
+
+Masalah:
+- Kondisi <= menyebabkan akses baris 3 dan kolom 4.
+- Akses tidak valid pada output: seluruh data[3][0..4] dan data[0..2][4].
+- printf("\n") berada di dalam loop kolom, sehingga setiap elemen tampil
+  pada baris terpisah.
+
+B. Perbaikan
+
+1. Loop input dimulai dari 0 dan menggunakan < BARIS.
+2. Loop input bagian kolom menggunakan < KOLOM.
+3. Akses diubah menjadi data[baris][kolom].
+4. Loop output menggunakan < BARIS dan < KOLOM.
+5. printf("\n") dipindahkan ke luar loop kolom.
+6. Format tampilan menggunakan "%d " agar data 1 sampai 12 tampil sesuai
+   contoh.
+
+C. Hasil pengujian
+
+Input: 1 2 3 4 5 6 7 8 9 10 11 12
+
+Output:
+1 2 3 4
+5 6 7 8
+9 10 11 12
+
+Output sudah sesuai dengan expected output.
+
+===============================================================
+2. DEBUGGING CHALLENGE 2 - RATA-RATA BARIS YANG SALAH
+===============================================================
+
+Program yang diperbaiki: debugging_02.c
+
+Tabel debugging:
+
+No. | Bagian Bermasalah              | Jenis Kesalahan              | Penyebab                                                     | Perbaikan
+----+--------------------------------+------------------------------+--------------------------------------------------------------+------------------------------------------
+1   | total_baris = 0 di luar loop   | Kesalahan logika             | Accumulator tidak direset untuk setiap baris                 | Pindahkan total_baris = 0.0 ke dalam loop baris
+2   | for (kolom = 0; kolom <= KOLOM)| Akses di luar batas          | Loop mengakses kolom 3, padahal indeks valid 0..2            | Gunakan kolom < KOLOM
+3   | total_baris = data[baris][kolom]| Accumulator ditimpa         | Nilai total selalu diganti dengan elemen terakhir            | Gunakan total_baris += data[baris][kolom]
+4   | total_baris / KOLOM            | Pembagian bilangan bulat     | total_baris bertipe int sehingga hasil dibulatkan ke bawah   | Gunakan total_baris bertipe double dan bagi sebagai double
+5   | printf("... %d", rata_rata)    | Format output salah         | %d digunakan untuk nilai bertipe double                      | Gunakan %.2f
+6   | Inisialisasi tidak dipindahkan | Nilai terbawa antar baris    | Jika hanya += yang diperbaiki, total baris sebelumnya tetap ada| Reset total_baris pada awal setiap baris
+
+Data dan hasil yang diharapkan:
+
+Baris | Nilai              | Rata-rata
+------+--------------------+----------
+0     | 80, 70, 90         | 80.00
+1     | 60, 75, 85         | 73.33
+2     | 90, 95, 100        | 95.00
+
+Hasil eksekusi program yang diperbaiki:
+Rata-rata baris 0: 80.00
+Rata-rata baris 1: 73.33
+Rata-rata baris 2: 95.00
+
+Hasil tersebut sudah sesuai dengan data yang diharapkan.
+
+Catatan:
+- Kedua program dikompilasi dengan:
+  gcc -std=c17 -Wall -Wextra
+- Tidak ada error atau warning.
+- Input Challenge 1 diuji menggunakan data 1 sampai 12.

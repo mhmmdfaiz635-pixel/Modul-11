@@ -1,0 +1,106 @@
+LAPORAN EKSPERIMEN DAN TRACING
+Modul 9 - Array Dua Dimensi dan Pengolahan Data Berbentuk Tabel
+
+===============================================================
+1. TRACING ARRAY DUA DIMENSI
+===============================================================
+
+Data:
+    data[0] = {2, 4, 6}
+    data[1] = {1, 3, 5}
+
+Trace table:
+
+Iterasi | Baris | Kolom | data[baris][kolom] | total_baris | total_keseluruhan
+--------+-------+-------+--------------------+-------------+------------------
+1       | 0     | 0     | 2                  | 2           | 0
+2       | 0     | 1     | 4                  | 6           | 0
+3       | 0     | 2     | 6                  | 12          | 0
+Setelah | 0     | -     | -                  | 12          | 12
+baris 0 |       |       |                    |             |
+4       | 1     | 0     | 1                  | 1           | 12
+5       | 1     | 1     | 3                  | 4           | 12
+6       | 1     | 2     | 5                  | 9           | 12
+Setelah | 1     | -     | -                  | 9           | 21
+baris 1 |       |       |                    |             |
+
+Hasil tracing:
+1. Total baris pertama = 2 + 4 + 6 = 12
+2. Total baris kedua   = 1 + 3 + 5 = 9
+3. Total keseluruhan   = 12 + 9 = 21
+4. Prediksi output:
+   Total baris 0: 12
+   Total baris 1: 9
+   Total keseluruhan: 21
+5. Output saat program dijalankan:
+   Total baris 0: 12
+   Total baris 1: 9
+   Total keseluruhan: 21
+   Prediksi sesuai dengan hasil eksekusi.
+
+6. Inisialisasi total_baris = 0 dipindahkan ke sebelum loop luar.
+   Output yang dihasilkan:
+   Total baris 0: 12
+   Total baris 1: 21
+   Total keseluruhan: 33
+
+7. Analisis perubahan:
+   Karena total_baris tidak direset pada setiap awal baris, nilai dari
+   baris sebelumnya ikut terbawa. Baris 1 dimulai dengan total_baris = 12,
+   lalu ditambah 1 + 3 + 5 sehingga menjadi 21. Akibatnya total keseluruhan
+   juga menjadi 33, bukan 21. Ini menunjukkan pentingnya accumulator per
+   baris diinisialisasi ulang di dalam loop luar.
+
+===============================================================
+2. EKSPERIMEN
+===============================================================
+
+Program dasar menggunakan:
+    int data[2][3] = {{10, 20, 30}, {40, 50, 60}};
+
+Tabel hasil eksperimen:
+
+No. | Perubahan                          | Prediksi                                      | Hasil Aktual
+----+------------------------------------+-----------------------------------------------+----------------------------------------------
+1   | Kondisi baris menjadi baris <= BARIS | Loop berjalan 3 kali; indeks baris 2 di luar batas | Tidak dijalankan karena undefined behavior.
+2   | Kondisi kolom menjadi kolom <= KOLOM | Setiap baris mengakses kolom 3 yang di luar batas  | Tidak dijalankan karena undefined behavior.
+3   | Akses menjadi data[kolom][baris]    | Sebagian data tertukar; indeks baris dapat mencapai 2 (di luar batas) | Tidak dijalankan karena undefined behavior.
+4   | printf("\n") dipindah ke loop dalam | Setiap elemen tampil pada baris baru        | 10, 20, 30, 40, 50, 60 masing-masing pada baris terpisah.
+5   | Inisialisasi hanya baris pertama    | Baris kedua otomatis bernilai nol            | 10 20 30 / 0 0 0
+6   | Tampilkan hanya diagonal            | Hanya elemen [0][0] dan [1][1] yang tampil   | 10 50
+7   | Tampilkan tabel secara transpose    | Baris dan kolom bertukar                     | 10 40 / 20 50 / 30 60
+8   | Hitung total setiap baris           | Baris 0 = 60; baris 1 = 150                  | Total baris 0: 60; Total baris 1: 150
+9   | Hitung total setiap kolom           | Kolom 0 = 50; kolom 1 = 70; kolom 2 = 90     | Total kolom 0: 50; Total kolom 1: 70; Total kolom 2: 90
+10  | Cari target 50                      | Ditemukan pada [1][1]                        | Target 50 ditemukan pada [1][1]
+11  | Cari target yang tidak tersedia     | Tidak ditemukan                              | Target 99 tidak ditemukan.
+12  | Ubah satu elemen melalui fungsi     | Elemen berubah, misalnya 20 menjadi 99       | 10 99 30 / 40 50 60
+
+Penjelasan penyebab:
+
+1. Indeks baris yang valid adalah 0 dan 1. Penggunaan <= membuat loop
+   mengakses baris 2 sehingga terjadi akses di luar batas array.
+2. Indeks kolom yang valid adalah 0, 1, dan 2. Penggunaan <= membuat loop
+   mengakses kolom 3 sehingga terjadi akses di luar batas array.
+3. Penukaran indeks membuat pola akses berubah. Untuk array 2 x 3,
+   data[kolom][baris] dapat mengakses baris 2 yang tidak valid.
+4. Baris baru berada di dalam loop kolom, sehingga setiap elemen dicetak
+   lalu langsung dipindahkan ke baris baru.
+5. Elemen yang tidak diberi nilai pada inisialisasi array diinisialisasi
+   menjadi nol oleh compiler.
+6. Diagonal utama memenuhi kondisi baris == kolom.
+7. Transpose diperoleh dengan menukar urutan loop: loop kolom di luar dan
+   loop baris di dalam.
+8. Total per baris menggunakan accumulator yang direset pada setiap baris.
+9. Total per kolom menggunakan loop luar kolom dan loop dalam baris.
+10. Pencarian dilakukan dengan nested loop dan membandingkan setiap elemen
+    dengan target.
+11. Jika tidak ada elemen yang sama dengan target, status ditemukan tetap 0.
+12. Array dua dimensi dikirim ke fungsi dan perubahan pada parameter array
+    memengaruhi array asli karena array diteruskan sebagai pointer.
+
+Catatan:
+- Eksperimen 1, 2, dan 3 tidak dijalankan karena dapat menyebabkan undefined
+  behavior. Ketiganya tetap diperiksa secara statis dan dijelaskan.
+- Eksperimen 4 sampai 12 dijalankan dengan aman dan hasil aktual dicatat.
+- Semua program dikompilasi menggunakan:
+  gcc -std=c17 -Wall -Wextra
